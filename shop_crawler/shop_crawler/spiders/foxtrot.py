@@ -36,12 +36,9 @@ class FoxtrotSpider(scrapy.Spider):
                                        'div[2]/div[1]/div[2]/text()').get()
         item['rating'] = len(response.xpath(
             '//*[@id="product-box-content"]/div[2]/div/div[3]/div[1]/div[5]/div/div/i[contains(@class, "icon_orange")]').getall())
-
-        item['characteristics'] = {
-            "Гарантія": response.xpath('//*[@id="section-properties"]/div[1]/div/div/div[3]/span/a/text()').get()
-        }
+        item['characteristics'] = dict()
         for name, value in zip(response.xpath('//*[@id="product-card-props"]/div[2]/div/div[1]/text()').getall(),
                                response.xpath('//*[@id="product-card-props"]/div[2]/div/div[2]/text()').getall()):
-            item['characteristics'][name.strip()] = value.strip()
+            item['characteristics'].update({name.strip(): value.strip()})
 
         yield item
