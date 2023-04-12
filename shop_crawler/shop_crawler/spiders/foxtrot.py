@@ -18,9 +18,8 @@ class FoxtrotSpider(scrapy.Spider):
                 cb_kwargs={"breadcrumbs": response.xpath('//*[@id="breadcrumbs"]/div/ul/li[2]/a/text()').get()}
             )
         next_page = response.css('nav.listing__pagination ul li.listing__pagination-nav')[-1]
-        if next_page is not None or len(next_page) != 0:
-            page = next_page.attrib['data-page']
-            yield scrapy.Request(
+        page = next_page.attrib['data-page']
+        yield scrapy.Request(
                 url=f'{response.url.split("?")[0]}?page={page}',
                 callback=self.parse,
                 dont_filter=True
